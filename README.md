@@ -5,7 +5,8 @@
 ## 🖼️ Screenshots
 
 ### Home Page
-![Home Page](screenshots/home.png)
+![Home Page](<img width="1881" height="911" alt="Screenshot 2026-03-07 214021" src="https://github.com/user-attachments/assets/b6ae24be-6476-4d19-b009-39c510874b31" />
+)
 
 ### Answer Example
 ![Answer Example](screenshots/answer.png)
