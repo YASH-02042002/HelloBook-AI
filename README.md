@@ -1,4 +1,4 @@
-# 📚 Hellobooks AI — Accounting Q&A Assistant
+# 📚 Hellobooks AI 
 
 > An AI-powered bookkeeping assistant built with **FastAPI**, **FAISS**, and **Groq LLaMA** using a **Retrieval-Augmented Generation (RAG)** architecture.
 
@@ -10,6 +10,7 @@
 ### Answer Example
 ![Answer 1](https://github.com/YASH-02042002/HelloBook-AI/blob/7f590266b22c62729e3bbf05793d68589f1f748e/Answer%20page%201.png)
 ![Answer 2](https://github.com/YASH-02042002/HelloBook-AI/blob/42cbf4f737bd9b95d72e184aa57dc5f71c9e45ef/Answer%20page%202.png)
+![Answer 3](https://github.com/YASH-02042002/HelloBook-AI/blob/091a8edf5c45934aa4f2f677345ab30afc874268/Answer%20page%203.png)
 
 ---
 
