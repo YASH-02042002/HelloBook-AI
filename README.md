@@ -8,7 +8,7 @@
 ![Home Page](https://github.com/YASH-02042002/HelloBook-AI/blob/611bec85c934bcbc1858bdd0ff9058bad893696f/Home%20page.png)
 
 ### Answer Example
-![Answer Example](screenshots/answer.png)
+![Answer Example](https://github.com/YASH-02042002/HelloBook-AI/blob/7f590266b22c62729e3bbf05793d68589f1f748e/Answer%20page%201.png)
 
 ---
 
