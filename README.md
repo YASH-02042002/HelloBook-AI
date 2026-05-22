@@ -10,7 +10,10 @@
 ![Home Page](Screenshots/homePage.png)
 
 ## AI Response
-![AI Response](Screenshots/1_Question_asking_page.png)
+![AI Response](Screenshots/1_Question_asking_page.png) 
+![AI Response](Screenshots/1_Answer_generate_page.png)
+![AI Response](Screenshots/2_Question_asking_page.png) 
+![AI Response](Screenshots/2_Answer_generate_page.png)
 
 ## Architecture Diagram
 ![Architecture](Screenshots/architecture.png)
