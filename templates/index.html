@@ -2,533 +2,555 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hellobooks AI – Accounting Assistant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HelloBooks AI</title>
+
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --accent: #10b981;
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --border: #e2e8f0;
-      --text: #1e293b;
-      --text-muted: #64748b;
-      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
-      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-    }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
+body {
+  background:
+    radial-gradient(circle at top left, rgba(99,102,241,0.18), transparent 25%),
+    radial-gradient(circle at bottom right, rgba(236,72,153,0.15), transparent 25%),
+    linear-gradient(135deg, #eef4ff, #ffffff, #f8f5ff);
 
-    /* ── Header ── */
-    header {
-      background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
-      color: white;
-      padding: 1.5rem 2rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      box-shadow: var(--shadow-md);
-    }
-    .logo {
-      font-size: 2rem;
-    }
-    .header-text h1 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -0.025em;
-    }
-    .header-text p {
-      font-size: 0.85rem;
-      opacity: 0.8;
-      margin-top: 0.15rem;
-    }
-    .badge {
-      margin-left: auto;
-      background: rgba(255,255,255,0.2);
-      border: 1px solid rgba(255,255,255,0.3);
-      color: white;
-      padding: 0.3rem 0.75rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
+  color: #0f172a;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-    /* ── Main Layout ── */
-    main {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
-    }
+header {
+  background: linear-gradient(90deg, #0f172a, #1d4ed8, #4f46e5);
+  color: white;
+  padding: 28px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.25);
+}
 
-    /* ── Topics ── */
-    .topics {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .topic-btn {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--primary);
-      padding: 0.4rem 0.9rem;
-      border-radius: 999px;
-      font-size: 0.82rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .topic-btn:hover {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
+.logo {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
 
-    /* ── Ask Box ── */
-    .ask-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 1rem;
-      padding: 1.5rem;
-      box-shadow: var(--shadow);
-      margin-bottom: 1.5rem;
-    }
-    .ask-card label {
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      display: block;
-      margin-bottom: 0.75rem;
-    }
-    .input-row {
-      display: flex;
-      gap: 0.75rem;
-    }
-    textarea {
-      flex: 1;
-      border: 1.5px solid var(--border);
-      border-radius: 0.6rem;
-      padding: 0.75rem 1rem;
-      font-size: 0.95rem;
-      font-family: inherit;
-      resize: vertical;
-      min-height: 64px;
-      color: var(--text);
-      transition: border-color 0.15s;
-      outline: none;
-    }
-    textarea:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
-    }
-    .ask-btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 0.6rem;
-      padding: 0 1.5rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
-      white-space: nowrap;
-      align-self: flex-end;
-      height: 44px;
-    }
-    .ask-btn:hover:not(:disabled) {
-      background: var(--primary-dark);
-    }
-    .ask-btn:active:not(:disabled) {
-      transform: scale(0.97);
-    }
-    .ask-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+.logo-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  backdrop-filter: blur(10px);
+}
 
-    /* ── Loading ── */
-    .loading {
-      display: none;
-      align-items: center;
-      gap: 0.75rem;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      margin-top: 1rem;
-    }
-    .spinner {
-      width: 20px;
-      height: 20px;
-      border: 2.5px solid #e2e8f0;
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+.badge {
+  background: rgba(255,255,255,0.18);
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  border: 1px solid rgba(255,255,255,0.25);
+}
 
-    /* ── Answer Card ── */
-    .answer-card {
-      display: none;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 1rem;
-      overflow: hidden;
-      box-shadow: var(--shadow-md);
-      margin-bottom: 1.5rem;
-    }
-    .answer-header {
-      background: linear-gradient(135deg, #ecfdf5, #d1fae5);
-      border-bottom: 1px solid #a7f3d0;
-      padding: 1rem 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .answer-header span:first-child {
-      font-size: 1.2rem;
-    }
-    .answer-header strong {
-      color: #065f46;
-      font-weight: 700;
-    }
-    .answer-body {
-      padding: 1.25rem 1.5rem;
-      font-size: 0.95rem;
-      line-height: 1.7;
-      white-space: pre-wrap;
-    }
-    .sources-row {
-      padding: 0.75rem 1.5rem 1rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      align-items: center;
-      border-top: 1px solid var(--border);
-    }
-    .sources-label {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .source-tag {
-      background: #eff6ff;
-      color: var(--primary);
-      border: 1px solid #bfdbfe;
-      padding: 0.2rem 0.6rem;
-      border-radius: 999px;
-      font-size: 0.78rem;
-      font-weight: 500;
-    }
+.hero {
+  text-align: center;
+  padding: 70px 20px 30px;
+}
 
-    /* ── Chunks ── */
-    .chunks-toggle {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      cursor: pointer;
-      border: none;
-      background: none;
-      padding: 0 1.5rem 1rem;
-      display: block;
-      text-decoration: underline;
-    }
-    .chunks-toggle:hover { color: var(--primary); }
+.hero h1 {
+  font-size: 58px;
+  margin-bottom: 18px;
+  animation: fadeUp 1s ease;
+}
 
-    .chunks-section {
-      display: none;
-      border-top: 1px solid var(--border);
-      padding: 1rem 1.5rem;
-      background: #f8fafc;
-    }
-    .chunks-section h3 {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.75rem;
-    }
-    .chunk {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 0.5rem;
-      padding: 0.75rem 1rem;
-      margin-bottom: 0.5rem;
-      font-size: 0.84rem;
-      line-height: 1.6;
-    }
-    .chunk-meta {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-bottom: 0.35rem;
-      font-weight: 600;
-    }
-    .chunk-score {
-      float: right;
-      background: #f1f5f9;
-      padding: 0.1rem 0.4rem;
-      border-radius: 4px;
-      font-size: 0.7rem;
-    }
+.hero span {
+  background: linear-gradient(90deg, #2563eb, #7c3aed, #db2777);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 
-    /* ── Error ── */
-    .error-card {
-      display: none;
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: 0.75rem;
-      padding: 1rem 1.25rem;
-      color: #991b1b;
-      font-size: 0.9rem;
-      margin-bottom: 1.5rem;
-    }
+.hero p {
+  font-size: 20px;
+  color: #475569;
+}
 
-    /* ── Sample Questions ── */
-    .samples {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 1rem;
-      padding: 1.25rem 1.5rem;
-      box-shadow: var(--shadow);
-    }
-    .samples h2 {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.75rem;
-    }
-    .sample-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-    .sample-q {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 0.5rem;
-      padding: 0.6rem 0.9rem;
-      font-size: 0.88rem;
-      cursor: pointer;
-      transition: all 0.15s;
-      text-align: left;
-      color: var(--text);
-    }
-    .sample-q:hover {
-      background: #eff6ff;
-      border-color: #bfdbfe;
-      color: var(--primary);
-    }
-    .sample-q::before {
-      content: "→ ";
-      color: var(--text-muted);
-    }
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(35px);
+  }
 
-    footer {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      padding: 2rem;
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.topics {
+  margin: 35px auto;
+  max-width: 1050px;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.topic {
+  background: rgba(255,255,255,0.8);
+  border: 1px solid #dbeafe;
+  color: #1d4ed8;
+  padding: 13px 22px;
+  border-radius: 14px;
+  box-shadow:
+    0 8px 20px rgba(59,130,246,0.08);
+
+  font-weight: 600;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.topic:hover {
+  transform: translateY(-3px) scale(1.04);
+  background: #2563eb;
+  color: white;
+}
+
+.container {
+  width: 90%;
+  max-width: 1120px;
+  margin: auto;
+}
+
+.question-card {
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(18px);
+
+  border-radius: 24px;
+  padding: 34px;
+
+  box-shadow:
+    0 10px 40px rgba(0,0,0,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.5);
+
+  border: 1px solid rgba(255,255,255,0.35);
+
+  margin-bottom: 38px;
+
+  transition: 0.3s ease;
+}
+
+.question-card:hover {
+  transform: translateY(-4px);
+}
+
+.card-title {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #ede9fe;
+  color: #4f46e5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+}
+
+textarea {
+  width: 100%;
+  min-height: 130px;
+  resize: vertical;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 16px;
+  padding: 18px;
+  font-size: 17px;
+  outline: none;
+  margin-bottom: 18px;
+  transition: 0.3s ease;
+}
+
+textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.ask-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.examples {
+  color: #64748b;
+  font-size: 14px;
+}
+
+button {
+  background: linear-gradient(90deg, #2563eb, #7c3aed);
+
+  color: white;
+  border: none;
+
+  padding: 16px 30px;
+  border-radius: 14px;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+
+  box-shadow:
+    0 10px 30px rgba(99,102,241,0.4);
+}
+
+button:hover {
+  transform: translateY(-3px) scale(1.03);
+
+  box-shadow:
+    0 20px 45px rgba(99,102,241,0.5);
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  margin-bottom: 60px;
+}
+
+.answer-card,
+.source-card,
+.related-card {
+  background: rgba(255,255,255,0.82);
+
+  backdrop-filter: blur(14px);
+
+  border: 1px solid rgba(255,255,255,0.4);
+
+  border-radius: 22px;
+
+  box-shadow:
+    0 15px 35px rgba(15,23,42,0.08);
+
+  overflow: hidden;
+
+  transition: 0.3s ease;
+}
+
+.answer-card:hover,
+.source-card:hover,
+.related-card:hover {
+  transform: translateY(-5px);
+}
+
+.answer-header,
+.source-header {
+  padding: 22px 26px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ai-label {
+  background: #dcfce7;
+  color: #15803d;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.answer-body {
+  padding: 28px;
+  line-height: 1.8;
+  font-size: 16px;
+  white-space: pre-wrap;
+}
+
+.sources {
+  padding: 20px;
+}
+
+.source-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+  background: #f8fafc;
+  transition: 0.3s ease;
+}
+
+.source-item:hover {
+  transform: scale(1.02);
+}
+
+.related-card {
+  margin-top: 22px;
+  padding: 22px;
+}
+
+.related-card h3 {
+  margin-bottom: 16px;
+}
+
+.related-card p {
+  padding: 13px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  color: #334155;
+  background: #f8fafc;
+  transition: 0.3s ease;
+}
+
+.related-card p:hover {
+  background: #eef2ff;
+  transform: translateX(4px);
+}
+
+.hidden {
+  display: none;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #2563eb;
+  font-weight: 700;
+}
+
+footer {
+  border-top: 1px solid #e2e8f0;
+  padding: 28px 7%;
+  color: #64748b;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(10px);
+}
+
+@media (max-width: 850px) {
+  .hero h1 {
+    font-size: 40px;
+  }
+
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+
+  header {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+}
+
   </style>
 </head>
+
 <body>
 
 <header>
-  <div class="logo">📚</div>
-  <div class="header-text">
-    <h1>Hellobooks AI</h1>
-    <p>Your AI-powered bookkeeping & accounting assistant</p>
+  <div class="logo">
+    <div class="logo-icon">📚</div>
+    <div>
+      <h2>HelloBooks AI</h2>
+      <p>Your AI-powered bookkeeping & accounting assistant</p>
+    </div>
   </div>
+
   <div class="badge">RAG · GPT</div>
 </header>
 
-<main>
+<section class="hero">
+  <h1>Ask. <span>Learn. Understand.</span></h1>
+  <p>Get accurate bookkeeping and accounting answers instantly with AI.</p>
+</section>
 
-  <!-- Topic Pills -->
-  <div class="topics">
-    <span style="font-size:0.82rem;color:var(--text-muted);align-self:center;font-weight:600;">Topics:</span>
-    <button class="topic-btn" onclick="setTopic('Bookkeeping')">📒 Bookkeeping</button>
-    <button class="topic-btn" onclick="setTopic('Invoices')">🧾 Invoices</button>
-    <button class="topic-btn" onclick="setTopic('Profit & Loss')">📈 Profit & Loss</button>
-    <button class="topic-btn" onclick="setTopic('Balance Sheet')">⚖️ Balance Sheet</button>
-    <button class="topic-btn" onclick="setTopic('Cash Flow')">💸 Cash Flow</button>
-    <button class="topic-btn" onclick="setTopic('Tax & GST')">🏛️ Tax & GST</button>
-    <button class="topic-btn" onclick="setTopic('Financial Ratios')">📊 Ratios</button>
+<div class="topics">
+  <div class="topic">📒 Bookkeeping</div>
+  <div class="topic">🧾 Invoices</div>
+  <div class="topic">📈 Profit & Loss</div>
+  <div class="topic">⚖️ Balance Sheet</div>
+  <div class="topic">💸 Cash Flow</div>
+  <div class="topic">🏛️ Tax & GST</div>
+  <div class="topic">📊 Ratios</div>
+</div>
+
+<main class="container">
+
+<section class="question-card">
+
+<div class="card-title">
+  <div class="circle">💬</div>
+
+  <div>
+    <h2>Ask an accounting question</h2>
+    <p>Type your question below and get AI-powered insights.</p>
   </div>
+</div>
 
-  <!-- Ask Box -->
-  <div class="ask-card">
-    <label>Ask an accounting question</label>
-    <div class="input-row">
-      <textarea id="questionInput" placeholder="e.g. What is the difference between cash flow and profit?" rows="2"></textarea>
-      <button class="ask-btn" id="askBtn" onclick="askQuestion()">Ask ✦</button>
-    </div>
-    <div class="loading" id="loading">
-      <div class="spinner"></div>
-      <span>Searching knowledge base and generating answer…</span>
-    </div>
-  </div>
+<textarea id="question" placeholder="Example: What is bookkeeping?"></textarea>
 
-  <!-- Error -->
-  <div class="error-card" id="errorCard"></div>
+<div class="ask-row">
 
-  <!-- Answer -->
-  <div class="answer-card" id="answerCard">
-    <div class="answer-header">
-      <span>✅</span>
-      <strong>Answer</strong>
-    </div>
-    <div class="answer-body" id="answerText"></div>
-    <div class="sources-row" id="sourcesRow">
-      <span class="sources-label">Sources:</span>
-    </div>
-    <button class="chunks-toggle" onclick="toggleChunks()">Show retrieved context chunks ▼</button>
-    <div class="chunks-section" id="chunksSection">
-      <h3>Retrieved Context</h3>
-      <div id="chunksList"></div>
-    </div>
-  </div>
+<div class="examples">
+💡 Examples: What is bookkeeping? | Explain cash flow statement | What are current assets?
+</div>
 
-  <!-- Sample Questions -->
-  <div class="samples">
-    <h2>💡 Sample Questions</h2>
-    <div class="sample-list">
-      <button class="sample-q" onclick="useQuestion(this.dataset.q)" data-q="What is the difference between bookkeeping and accounting?">What is the difference between bookkeeping and accounting?</button>
-      <button class="sample-q" onclick="useQuestion(this.dataset.q)" data-q="How do I calculate gross profit margin?">How do I calculate gross profit margin?</button>
-      <button class="sample-q" onclick="useQuestion(this.dataset.q)" data-q="What information should be included on a tax invoice?">What information should be included on a tax invoice?</button>
-      <button class="sample-q" onclick="useQuestion(this.dataset.q)" data-q="Explain the difference between accounts payable and accounts receivable">Explain the difference between accounts payable and accounts receivable</button>
-      <button class="sample-q" onclick="useQuestion(this.dataset.q)" data-q="What is free cash flow and why does it matter?">What is free cash flow and why does it matter?</button>
-      <button class="sample-q" onclick="useQuestion(this.dataset.q)" data-q="How does the current ratio measure a company's liquidity?">How does the current ratio measure a company's liquidity?</button>
-      <button class="sample-q" onclick="useQuestion(this.dataset.q)" data-q="What is double-entry bookkeeping?">What is double-entry bookkeeping?</button>
-    </div>
-  </div>
+<button onclick="askQuestion()">Ask AI ✨</button>
+
+</div>
+
+</section>
+
+<div id="loading" class="loading hidden">
+Generating answer...
+</div>
+
+<section id="result" class="result-grid hidden">
+
+<div class="answer-card">
+
+<div class="answer-header">
+  <h2>✨ AI Answer</h2>
+  <span class="ai-label">Generated by AI</span>
+</div>
+
+<div id="answer" class="answer-body"></div>
+
+</div>
+
+<div>
+
+<div class="source-card">
+
+<div class="source-header">
+  <h3>📄 Sources</h3>
+</div>
+
+<div id="sources" class="sources"></div>
+
+</div>
+
+<div class="related-card">
+
+<h3>🔗 Related Topics</h3>
+
+<p onclick="setQuestion('What are operating expenses?')">What are operating expenses?</p>
+<p onclick="setQuestion('How is COGS calculated?')">How is COGS calculated?</p>
+<p onclick="setQuestion('Difference between cash flow and profit?')">Difference between cash flow and profit?</p>
+<p onclick="setQuestion('What is double-entry bookkeeping?')">What is double-entry bookkeeping?</p>
+
+</div>
+
+</div>
+
+</section>
 
 </main>
 
-<footer>Hellobooks AI · Built with FastAPI + FAISS + OpenAI · RAG Architecture</footer>
+<footer>
+<p>© 2026 HelloBooks AI. Built with ❤️ and AI.</p>
+<p>FastAPI · FAISS · Groq LLaMA · RAG</p>
+</footer>
 
 <script>
-  function setTopic(topic) {
-    document.getElementById('questionInput').value = `Tell me about ${topic} in accounting`;
-  }
 
-  function useQuestion(q) {
-    document.getElementById('questionInput').value = q;
-    askQuestion();
-  }
+async function askQuestion() {
 
-  async function askQuestion() {
-    const question = document.getElementById('questionInput').value.trim();
-    if (!question) {
-      alert('Please enter a question.');
-      return;
-    }
+const question = document.getElementById("question").value.trim();
 
-    const btn = document.getElementById('askBtn');
-    const loading = document.getElementById('loading');
-    const answerCard = document.getElementById('answerCard');
-    const errorCard = document.getElementById('errorCard');
+if (!question) {
+  alert("Please enter a question.");
+  return;
+}
 
-    btn.disabled = true;
-    loading.style.display = 'flex';
-    answerCard.style.display = 'none';
-    errorCard.style.display = 'none';
+document.getElementById("loading").classList.remove("hidden");
+document.getElementById("result").classList.add("hidden");
 
-    try {
-      const res = await fetch('/ask', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question }),
-      });
+try {
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.detail || 'Server error');
-      }
+  const response = await fetch("/ask", {
+    method: "POST",
 
-      const data = await res.json();
-      displayAnswer(data);
-    } catch (err) {
-      errorCard.textContent = `❌ Error: ${err.message}`;
-      errorCard.style.display = 'block';
-    } finally {
-      btn.disabled = false;
-      loading.style.display = 'none';
-    }
-  }
+    headers: {
+      "Content-Type": "application/json"
+    },
 
-  function displayAnswer(data) {
-    document.getElementById('answerText').textContent = data.answer;
-
-    // Sources
-    const sourcesRow = document.getElementById('sourcesRow');
-    sourcesRow.innerHTML = '<span class="sources-label">Sources:</span>';
-    data.sources.forEach(src => {
-      const tag = document.createElement('span');
-      tag.className = 'source-tag';
-      tag.textContent = src;
-      sourcesRow.appendChild(tag);
-    });
-
-    // Chunks
-    const chunksList = document.getElementById('chunksList');
-    chunksList.innerHTML = '';
-    data.chunks.forEach((chunk, i) => {
-      const div = document.createElement('div');
-      div.className = 'chunk';
-      div.innerHTML = `
-        <div class="chunk-meta">
-          📄 ${chunk.source}
-          <span class="chunk-score">Score: ${chunk.score}</span>
-        </div>
-        ${chunk.text}
-      `;
-      chunksList.appendChild(div);
-    });
-
-    // Reset toggle
-    document.getElementById('chunksSection').style.display = 'none';
-    document.querySelector('.chunks-toggle').textContent = 'Show retrieved context chunks ▼';
-
-    document.getElementById('answerCard').style.display = 'block';
-    document.getElementById('answerCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-
-  function toggleChunks() {
-    const section = document.getElementById('chunksSection');
-    const btn = document.querySelector('.chunks-toggle');
-    if (section.style.display === 'none') {
-      section.style.display = 'block';
-      btn.textContent = 'Hide context chunks ▲';
-    } else {
-      section.style.display = 'none';
-      btn.textContent = 'Show retrieved context chunks ▼';
-    }
-  }
-
-  // Enter key support
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('questionInput').addEventListener('keydown', e => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        askQuestion();
-      }
-    });
+    body: JSON.stringify({
+      question: question
+    })
   });
+
+  const data = await response.json();
+
+  document.getElementById("answer").innerText =
+    data.answer || "No answer received.";
+
+  const sourcesBox = document.getElementById("sources");
+  sourcesBox.innerHTML = "";
+
+  if (data.sources && data.sources.length > 0) {
+
+    data.sources.forEach((source, index) => {
+
+      const div = document.createElement("div");
+
+      div.className = "source-item";
+
+      div.innerHTML = `
+        <strong>${index + 1}. ${source}</strong>
+        <small>Knowledge base reference</small>
+      `;
+
+      sourcesBox.appendChild(div);
+
+    });
+
+  } else {
+
+    sourcesBox.innerHTML = "<p>No sources returned.</p>";
+
+  }
+
+  document.getElementById("result").classList.remove("hidden");
+
+} catch (error) {
+
+  alert("Something went wrong. Please check your server.");
+  console.error(error);
+
+} finally {
+
+  document.getElementById("loading").classList.add("hidden");
+
+}
+
+}
+
 </script>
+
 </body>
 </html>
