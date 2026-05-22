@@ -1,9 +1,7 @@
-import os
 import logging
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-import faiss
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -68,7 +66,7 @@ class AnswerResponse(BaseModel):
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     """Serve the web UI."""
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(request, "index.html")
 
 @app.get("/health")
 async def health():
@@ -117,6 +115,7 @@ async def rebuild_idx():
         _idx, _metadata = load_index()
         return {"status": "ok", "message": "Index rebuilt successfully", "vectors": _idx.ntotal}
     except Exception as e:
+        logger.exception("Failed to rebuild index")
         raise HTTPException(status_code=500, detail=str(e))
     
 if __name__ == "__main__":
