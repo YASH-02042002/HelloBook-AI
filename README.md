@@ -7,10 +7,10 @@
 # 🖼️ Screenshots
 
 ## Home Page
-![Home Page](Screenshots/home Page.png)
+![Home Page](Screenshots/homePage.png)
 
 ## AI Response
-![AI Response](Screenshots/1 Question asking page.png)
+![AI Response](Screenshots/1_Question_asking_page.png)
 
 ## Architecture Diagram
 ![Architecture](Screenshots/architecture.png)
