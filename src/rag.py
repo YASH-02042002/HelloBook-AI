@@ -14,13 +14,14 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
 
-KNOWLEDGE_BASE_DIR = Path(__file__).parent.parent / "knowledge_base"
-INDEX_DIR = Path(__file__).parent.parent / "vector_store"
+BASE_DIR = Path(__file__).resolve().parent.parent
+KNOWLEDGE_BASE_DIR = BASE_DIR / "knowledge_base"
+INDEX_DIR = BASE_DIR / "vector_store"
 INDEX_FILE = INDEX_DIR / "faiss.index"
 META_FILE = INDEX_DIR / "metadata.json"
 
-EMBEDDING_MODEL = "text-embedding-3-small"
-CHAT_MODEL = "gpt-3.5-turbo"
+EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+CHAT_MODEL = "llama-3.3-70b-versatile"
 CHUNK_SIZE = 800
 CHUNK_OVERLAP = 100
 TOP_K = 3
@@ -38,9 +39,13 @@ def get_embedder():
 
 def get_embeddings(texts: list[str]) -> np.ndarray:
     """Generate embeddings locally using HuggingFace sentence-transformers."""
+    if not texts:
+        return np.empty((0, 384), dtype="float32")
     embedder = get_embedder()
     vectors = embedder.encode(texts, show_progress_bar=False, convert_to_numpy=True)
-    return vectors.astype("float32")
+    vectors = vectors.astype("float32")
+    faiss.normalize_L2(vectors)
+    return vectors
 
 def get_groq_client():
     from groq import Groq
@@ -56,6 +61,8 @@ def get_groq_client():
 
 def chunk_text(text: str, chunk_s: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) -> list[str]:
     """Split text into overlapping chunks."""
+    if chunk_s <= overlap:
+        raise ValueError("chunk_size must be greater than overlap")
     chunks = []
     start = 0
     while start < len(text):
@@ -76,11 +83,11 @@ def load_documents() -> list[dict]:
         raise FileNotFoundError(f"No markdown files found in {KNOWLEDGE_BASE_DIR}")
 
     for filepath in sorted(md_files):
-        with open(filepath, "r", encoding="utf-8") as f:
-            content = f.read()
-
-        filename = Path(filepath).stem
+        path = Path(filepath)
+        content = path.read_text(encoding="utf-8")
+        filename = path.stem
         chunks = chunk_text(content)
+
         for i, chunk in enumerate(chunks):
             docs.append({
                 "id": hashlib.md5(f"{filename}_{i}_{chunk[:50]}".encode()).hexdigest(),
@@ -115,11 +122,10 @@ def build_index(force:bool = False):
     index.add(all_vectors)
 
     faiss.write_index(index, str(INDEX_FILE))
-    with open(META_FILE, "w", encoding="utf-8") as f:
-        json.dump(docs, f, indent=2, ensure_ascii=False)
+    META_FILE.write_text(json.dumps(docs, indent=2, ensure_ascii=False), encoding="utf-8")
 
-    logger.info(f"Index Built: {index.ntotal} vectores, dimension {dim}")
-    logger.info(f"Saved to {INDEX_DIR}")
+    logger.info("Index built successfully: %s vectors, dimension %s", index.ntotal, dim)
+
 
 def load_index() -> tuple[faiss.Index, list[dict]]:
     """Load the FAISS index & metadata from disk."""
@@ -128,8 +134,7 @@ def load_index() -> tuple[faiss.Index, list[dict]]:
             "Vector index not Found. Run 'python src/rag.py --build' to first."
         )
     index = faiss.read_index(str(INDEX_FILE))
-    with open(META_FILE, "r", encoding="utf-8") as f:
-        metadata = json.load(f)
+    metadata = json.loads(META_FILE.read_text(encoding="utf-8"))
     return index, metadata
 
 def retrieve(query:str, index: faiss.Index, metadata: list[dict], top_k: int = TOP_K) -> list[dict]:
@@ -195,7 +200,7 @@ def ask(query: str, index: Optional[faiss.Index] = None, metadata: Optional[list
 
     retrieved = retrieve(query, index, metadata, top_k=TOP_K)
     answer = generate_answer(query, retrieved)
-    sources = list({doc["source"] for doc in retrieved})
+    sources = sorted({doc["source"] for doc in retrieved})
     return {
         "question": query,
         "answer": answer,
@@ -204,7 +209,6 @@ def ask(query: str, index: Optional[faiss.Index] = None, metadata: Optional[list
     }
 
 if __name__ == "__main__":
-    import sys
     import argparse
 
     parser = argparse.ArgumentParser(description="Hellobooks RAG System")
@@ -217,10 +221,10 @@ if __name__ == "__main__":
         build_index(force=args.force)
     
     if args.query:
-        print(f"\n🔍 Query: {args.query}\n")
+        print(f"\nQuery: {args.query}\n")
         result = ask(args.query)
-        print(f"💡 Answer:\n{result['answer']}\n")
-        print(f"📚 Sources: {', '.join(result['sources'])}")
+        print(f"Answer:\n{result['answer']}\n")
+        print(f"Sources: {', '.join(result['sources'])}")
     
     if not args.build and not args.force and not args.query:
         parser.print_help()
