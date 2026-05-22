@@ -7,7 +7,8 @@
 # 🖼️ Screenshots
 
 ## Home Page
-![Home Page](Screenshots/homePage.png)
+![Home Page](Screenshots/HomePageLight.png)
+![Home Page](Screenshots/HomePageDark.png)
 
 ## AI Response
 ![AI Response](Screenshots/1_Question_asking_page.png) 
