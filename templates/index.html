@@ -6,7 +6,6 @@
   <title>HelloBooks AI</title>
 
   <style>
-
 * {
   margin: 0;
   padding: 0;
@@ -14,15 +13,90 @@
   font-family: "Segoe UI", sans-serif;
 }
 
-body {
-  background:
-    radial-gradient(circle at top left, rgba(99,102,241,0.18), transparent 25%),
-    radial-gradient(circle at bottom right, rgba(236,72,153,0.15), transparent 25%),
-    linear-gradient(135deg, #eef4ff, #ffffff, #f8f5ff);
+:root {
+  --text: #0f172a;
+  --muted: #475569;
+  --card: rgba(255,255,255,0.78);
+  --card-strong: rgba(255,255,255,0.88);
+  --border: rgba(226,232,240,0.9);
+  --input-bg: rgba(255,255,255,0.75);
+  --topic-bg: rgba(255,255,255,0.82);
+  --footer-bg: rgba(255,255,255,0.7);
+}
 
-  color: #0f172a;
+body.dark {
+  --text: #e5e7eb;
+  --muted: #cbd5e1;
+  --card: rgba(15,23,42,0.78);
+  --card-strong: rgba(15,23,42,0.88);
+  --border: rgba(148,163,184,0.25);
+  --input-bg: rgba(15,23,42,0.75);
+  --topic-bg: rgba(15,23,42,0.75);
+  --footer-bg: rgba(15,23,42,0.75);
+}
+
+body {
+  background: linear-gradient(-45deg, #eef4ff, #ffffff, #f8f5ff, #e0f2fe, #fae8ff);
+  background-size: 400% 400%;
+  animation: gradientMove 10s ease infinite;
+  color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
+  position: relative;
+  transition: 0.35s ease;
+}
+
+body.dark {
+  background: linear-gradient(-45deg, #020617, #0f172a, #1e1b4b, #312e81, #111827);
+  background-size: 400% 400%;
+  animation: gradientMove 10s ease infinite;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  width: 420px;
+  height: 420px;
+  background: rgba(37, 99, 235, 0.18);
+  border-radius: 50%;
+  top: 120px;
+  left: -140px;
+  filter: blur(45px);
+  animation: floatBlob 8s ease-in-out infinite;
+  z-index: -1;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  width: 450px;
+  height: 450px;
+  background: rgba(219, 39, 119, 0.15);
+  border-radius: 50%;
+  right: -150px;
+  bottom: 80px;
+  filter: blur(45px);
+  animation: floatBlob 10s ease-in-out infinite;
+  z-index: -1;
+}
+
+body.dark::before {
+  background: rgba(96, 165, 250, 0.22);
+}
+
+body.dark::after {
+  background: rgba(168, 85, 247, 0.22);
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes floatBlob {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-30px) scale(1.08); }
 }
 
 header {
@@ -53,12 +127,30 @@ header {
   backdrop-filter: blur(10px);
 }
 
-.badge {
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.badge,
+.theme-toggle {
   background: rgba(255,255,255,0.18);
   padding: 10px 18px;
   border-radius: 999px;
   font-weight: 700;
   border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+}
+
+.theme-toggle {
+  cursor: pointer;
+  box-shadow: none;
+  font-size: 14px;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-2px);
 }
 
 .hero {
@@ -81,19 +173,12 @@ header {
 
 .hero p {
   font-size: 20px;
-  color: #475569;
+  color: var(--muted);
 }
 
 @keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(35px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(35px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .topics {
@@ -106,17 +191,20 @@ header {
 }
 
 .topic {
-  background: rgba(255,255,255,0.8);
-  border: 1px solid #dbeafe;
-  color: #1d4ed8;
+  background: var(--topic-bg);
+  border: 1px solid var(--border);
+  color: #2563eb;
   padding: 13px 22px;
   border-radius: 14px;
-  box-shadow:
-    0 8px 20px rgba(59,130,246,0.08);
-
+  box-shadow: 0 8px 20px rgba(59,130,246,0.08);
   font-weight: 600;
   transition: 0.3s ease;
   cursor: pointer;
+  backdrop-filter: blur(12px);
+}
+
+body.dark .topic {
+  color: #93c5fd;
 }
 
 .topic:hover {
@@ -132,20 +220,13 @@ header {
 }
 
 .question-card {
-  background: rgba(255,255,255,0.75);
+  background: var(--card);
   backdrop-filter: blur(18px);
-
   border-radius: 24px;
   padding: 34px;
-
-  box-shadow:
-    0 10px 40px rgba(0,0,0,0.08),
-    inset 0 1px 0 rgba(255,255,255,0.5);
-
-  border: 1px solid rgba(255,255,255,0.35);
-
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.5);
+  border: 1px solid var(--border);
   margin-bottom: 38px;
-
   transition: 0.3s ease;
 }
 
@@ -176,13 +257,19 @@ textarea {
   width: 100%;
   min-height: 130px;
   resize: vertical;
-  border: 1.5px solid #cbd5e1;
+  border: 1.5px solid var(--border);
   border-radius: 16px;
   padding: 18px;
   font-size: 17px;
   outline: none;
   margin-bottom: 18px;
   transition: 0.3s ease;
+  background: var(--input-bg);
+  color: var(--text);
+}
+
+textarea::placeholder {
+  color: #64748b;
 }
 
 textarea:focus {
@@ -199,35 +286,26 @@ textarea:focus {
 }
 
 .examples {
-  color: #64748b;
+  color: var(--muted);
   font-size: 14px;
 }
 
 button {
   background: linear-gradient(90deg, #2563eb, #7c3aed);
-
   color: white;
   border: none;
-
   padding: 16px 30px;
   border-radius: 14px;
-
   font-size: 16px;
   font-weight: 700;
-
   cursor: pointer;
-
   transition: 0.3s ease;
-
-  box-shadow:
-    0 10px 30px rgba(99,102,241,0.4);
+  box-shadow: 0 10px 30px rgba(99,102,241,0.4);
 }
 
 button:hover {
   transform: translateY(-3px) scale(1.03);
-
-  box-shadow:
-    0 20px 45px rgba(99,102,241,0.5);
+  box-shadow: 0 20px 45px rgba(99,102,241,0.5);
 }
 
 .result-grid {
@@ -240,19 +318,12 @@ button:hover {
 .answer-card,
 .source-card,
 .related-card {
-  background: rgba(255,255,255,0.82);
-
+  background: var(--card-strong);
   backdrop-filter: blur(14px);
-
-  border: 1px solid rgba(255,255,255,0.4);
-
+  border: 1px solid var(--border);
   border-radius: 22px;
-
-  box-shadow:
-    0 15px 35px rgba(15,23,42,0.08);
-
+  box-shadow: 0 15px 35px rgba(15,23,42,0.08);
   overflow: hidden;
-
   transition: 0.3s ease;
 }
 
@@ -265,7 +336,7 @@ button:hover {
 .answer-header,
 .source-header {
   padding: 22px 26px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -292,16 +363,20 @@ button:hover {
 }
 
 .source-item {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 14px;
   padding: 16px;
   margin-bottom: 14px;
-  background: #f8fafc;
+  background: var(--topic-bg);
   transition: 0.3s ease;
 }
 
 .source-item:hover {
   transform: scale(1.02);
+}
+
+.source-item small {
+  color: var(--muted);
 }
 
 .related-card {
@@ -315,17 +390,24 @@ button:hover {
 
 .related-card p {
   padding: 13px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 12px;
   margin-bottom: 10px;
-  color: #334155;
-  background: #f8fafc;
+  color: var(--text);
+  background: var(--topic-bg);
   transition: 0.3s ease;
+  cursor: pointer;
 }
 
 .related-card p:hover {
   background: #eef2ff;
+  color: #1e3a8a;
   transform: translateX(4px);
+}
+
+body.dark .related-card p:hover {
+  background: rgba(37,99,235,0.25);
+  color: #bfdbfe;
 }
 
 .hidden {
@@ -340,13 +422,13 @@ button:hover {
 }
 
 footer {
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--border);
   padding: 28px 7%;
-  color: #64748b;
+  color: var(--muted);
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  background: rgba(255,255,255,0.7);
+  background: var(--footer-bg);
   backdrop-filter: blur(10px);
 }
 
@@ -365,7 +447,6 @@ footer {
     text-align: center;
   }
 }
-
   </style>
 </head>
 
@@ -380,7 +461,10 @@ footer {
     </div>
   </div>
 
-  <div class="badge">RAG · GPT</div>
+  <div class="header-actions">
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
+    <div class="badge">RAG · GPT</div>
+  </div>
 </header>
 
 <section class="hero">
@@ -399,157 +483,157 @@ footer {
 </div>
 
 <main class="container">
+  <section class="question-card">
+    <div class="card-title">
+      <div class="circle">💬</div>
+      <div>
+        <h2>Ask an accounting question</h2>
+        <p>Type your question below and get AI-powered insights.</p>
+      </div>
+    </div>
 
-<section class="question-card">
+    <textarea id="question" placeholder="Example: What is bookkeeping?"></textarea>
 
-<div class="card-title">
-  <div class="circle">💬</div>
+    <div class="ask-row">
+      <div class="examples">
+        💡 Examples: What is bookkeeping? | Explain cash flow statement | What are current assets?
+      </div>
+      <button onclick="askQuestion()">Ask AI ✨</button>
+    </div>
+  </section>
 
-  <div>
-    <h2>Ask an accounting question</h2>
-    <p>Type your question below and get AI-powered insights.</p>
+  <div id="loading" class="loading hidden">
+    Generating answer...
   </div>
-</div>
 
-<textarea id="question" placeholder="Example: What is bookkeeping?"></textarea>
+  <section id="result" class="result-grid hidden">
+    <div class="answer-card">
+      <div class="answer-header">
+        <h2>✨ AI Answer</h2>
+        <span class="ai-label">Generated by AI</span>
+      </div>
+      <div id="answer" class="answer-body"></div>
+    </div>
 
-<div class="ask-row">
+    <div>
+      <div class="source-card">
+        <div class="source-header">
+          <h3>📄 Sources</h3>
+        </div>
+        <div id="sources" class="sources"></div>
+      </div>
 
-<div class="examples">
-💡 Examples: What is bookkeeping? | Explain cash flow statement | What are current assets?
-</div>
-
-<button onclick="askQuestion()">Ask AI ✨</button>
-
-</div>
-
-</section>
-
-<div id="loading" class="loading hidden">
-Generating answer...
-</div>
-
-<section id="result" class="result-grid hidden">
-
-<div class="answer-card">
-
-<div class="answer-header">
-  <h2>✨ AI Answer</h2>
-  <span class="ai-label">Generated by AI</span>
-</div>
-
-<div id="answer" class="answer-body"></div>
-
-</div>
-
-<div>
-
-<div class="source-card">
-
-<div class="source-header">
-  <h3>📄 Sources</h3>
-</div>
-
-<div id="sources" class="sources"></div>
-
-</div>
-
-<div class="related-card">
-
-<h3>🔗 Related Topics</h3>
-
-<p onclick="setQuestion('What are operating expenses?')">What are operating expenses?</p>
-<p onclick="setQuestion('How is COGS calculated?')">How is COGS calculated?</p>
-<p onclick="setQuestion('Difference between cash flow and profit?')">Difference between cash flow and profit?</p>
-<p onclick="setQuestion('What is double-entry bookkeeping?')">What is double-entry bookkeeping?</p>
-
-</div>
-
-</div>
-
-</section>
-
+      <div class="related-card">
+        <h3>🔗 Related Topics</h3>
+        <p onclick="setQuestion('What are operating expenses?')">What are operating expenses?</p>
+        <p onclick="setQuestion('How is COGS calculated?')">How is COGS calculated?</p>
+        <p onclick="setQuestion('Difference between cash flow and profit?')">Difference between cash flow and profit?</p>
+        <p onclick="setQuestion('What is double-entry bookkeeping?')">What is double-entry bookkeeping?</p>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer>
-<p>© 2026 HelloBooks AI. Built with ❤️ and AI.</p>
-<p>FastAPI · FAISS · Groq LLaMA · RAG</p>
+  <p>© 2026 HelloBooks AI. Built with ❤️ and AI.</p>
+  <p>FastAPI · FAISS · Groq LLaMA · RAG</p>
 </footer>
 
 <script>
+function toggleTheme() {
+  const body = document.body;
+  const btn = document.getElementById("themeBtn");
 
-async function askQuestion() {
+  body.classList.toggle("dark");
 
-const question = document.getElementById("question").value.trim();
-
-if (!question) {
-  alert("Please enter a question.");
-  return;
+  if (body.classList.contains("dark")) {
+    btn.innerText = "☀️ Light";
+    localStorage.setItem("theme", "dark");
+  } else {
+    btn.innerText = "🌙 Dark";
+    localStorage.setItem("theme", "light");
+  }
 }
 
-document.getElementById("loading").classList.remove("hidden");
-document.getElementById("result").classList.add("hidden");
+window.onload = function () {
+  const savedTheme = localStorage.getItem("theme");
+  const btn = document.getElementById("themeBtn");
 
-try {
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark");
+    btn.innerText = "☀️ Light";
+  }
+};
 
-  const response = await fetch("/ask", {
-    method: "POST",
+function setQuestion(text) {
+  document.getElementById("question").value = text;
 
-    headers: {
-      "Content-Type": "application/json"
-    },
-
-    body: JSON.stringify({
-      question: question
-    })
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
   });
 
-  const data = await response.json();
+  setTimeout(() => {
+    askQuestion();
+  }, 400);
+}
 
-  document.getElementById("answer").innerText =
-    data.answer || "No answer received.";
+async function askQuestion() {
+  const question = document.getElementById("question").value.trim();
 
-  const sourcesBox = document.getElementById("sources");
-  sourcesBox.innerHTML = "";
-
-  if (data.sources && data.sources.length > 0) {
-
-    data.sources.forEach((source, index) => {
-
-      const div = document.createElement("div");
-
-      div.className = "source-item";
-
-      div.innerHTML = `
-        <strong>${index + 1}. ${source}</strong>
-        <small>Knowledge base reference</small>
-      `;
-
-      sourcesBox.appendChild(div);
-
-    });
-
-  } else {
-
-    sourcesBox.innerHTML = "<p>No sources returned.</p>";
-
+  if (!question) {
+    alert("Please enter a question.");
+    return;
   }
 
-  document.getElementById("result").classList.remove("hidden");
+  document.getElementById("loading").classList.remove("hidden");
+  document.getElementById("result").classList.add("hidden");
 
-} catch (error) {
+  try {
+    const response = await fetch("/ask", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        question: question
+      })
+    });
 
-  alert("Something went wrong. Please check your server.");
-  console.error(error);
+    const data = await response.json();
 
-} finally {
+    document.getElementById("answer").innerText =
+      data.answer || "No answer received.";
 
-  document.getElementById("loading").classList.add("hidden");
+    const sourcesBox = document.getElementById("sources");
+    sourcesBox.innerHTML = "";
 
+    if (data.sources && data.sources.length > 0) {
+      data.sources.forEach((source, index) => {
+        const div = document.createElement("div");
+        div.className = "source-item";
+
+        div.innerHTML = `
+          <strong>${index + 1}. ${source}</strong>
+          <small>Knowledge base reference</small>
+        `;
+
+        sourcesBox.appendChild(div);
+      });
+    } else {
+      sourcesBox.innerHTML = "<p>No sources returned.</p>";
+    }
+
+    document.getElementById("result").classList.remove("hidden");
+
+  } catch (error) {
+    alert("Something went wrong. Please check your server.");
+    console.error(error);
+
+  } finally {
+    document.getElementById("loading").classList.add("hidden");
+  }
 }
-
-}
-
 </script>
 
 </body>
