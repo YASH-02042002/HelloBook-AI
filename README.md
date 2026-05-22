@@ -1,218 +1,377 @@
-# 📚 Hellobooks AI 
+# 📚 HelloBooks AI
 
-> An AI-powered bookkeeping assistant built with **FastAPI**, **FAISS**, and **Groq LLaMA** using a **Retrieval-Augmented Generation (RAG)** architecture.
-
-## 🖼️ Screenshots
-
-### Home Page
-![Home Page](https://github.com/YASH-02042002/HelloBook-AI/blob/611bec85c934bcbc1858bdd0ff9058bad893696f/Home%20page.png)
-
-### Answer Example
-![Answer 1](https://github.com/YASH-02042002/HelloBook-AI/blob/7f590266b22c62729e3bbf05793d68589f1f748e/Answer%20page%201.png)
-![Answer 2](https://github.com/YASH-02042002/HelloBook-AI/blob/42cbf4f737bd9b95d72e184aa57dc5f71c9e45ef/Answer%20page%202.png)
-![Answer 3](https://github.com/YASH-02042002/HelloBook-AI/blob/091a8edf5c45934aa4f2f677345ab30afc874268/Answer%20page%203.png)
+> An AI-powered bookkeeping assistant built using **FastAPI**, **FAISS**, **Sentence Transformers**, and **Groq LLaMA** with a **Retrieval-Augmented Generation (RAG)** architecture.
 
 ---
 
-## 📖 Overview
+# 🖼️ Screenshots
 
-Hellobooks AI answers accounting questions by retrieving relevant information from a curated knowledge base and generating clear, contextual answers using Groq LLaMA.
+## Home Page
+![Home Page](Screenshots/home.png)
 
-### RAG Flow:
-```
+## AI Response
+![AI Response](Screenshots/response.png)
+
+## Architecture Diagram
+![Architecture](Screenshots/architecture.png)
+
+---
+
+# 📖 Overview
+
+HelloBooks AI is an intelligent bookkeeping assistant that answers accounting and finance-related questions using Retrieval-Augmented Generation (RAG).
+
+The system retrieves relevant information from a custom bookkeeping knowledge base using semantic vector search and generates contextual answers using Groq LLaMA.
+
+This project demonstrates practical implementation of:
+
+- Retrieval-Augmented Generation (RAG)
+- Semantic Search
+- Vector Databases
+- Large Language Models
+- FastAPI Backend Development
+- AI System Architecture
+
+---
+
+# ❓ Problem Statement
+
+Traditional keyword-based search systems fail to understand semantic meaning and often return irrelevant results.
+
+HelloBooks AI solves this problem by:
+
+- Understanding natural language queries
+- Retrieving semantically relevant bookkeeping content
+- Generating intelligent context-aware responses
+- Providing source-based answers
+
+This makes financial and bookkeeping concepts easier to understand for students, freelancers, and small businesses.
+
+---
+
+# ⚙️ RAG Pipeline Architecture
+
+```text
 User Question
-     │
-     ▼
-Generate Query Embedding (HuggingFace - Local, FREE)
-     │
-     ▼
-Search FAISS Vector Index → Top-K Relevant Chunks
-     │
-     ▼
+      │
+      ▼
+Generate Query Embedding
+(HuggingFace Sentence Transformer)
+      │
+      ▼
+Search FAISS Vector Index
+      │
+      ▼
+Retrieve Top-K Relevant Chunks
+      │
+      ▼
 Build Prompt with Context
-     │
-     ▼
+      │
+      ▼
 Groq LLaMA Generates Answer
-     │
-     ▼
+      │
+      ▼
 Return Answer + Sources
 ```
 
 ---
 
-## 🗂️ Project Structure
+# 🗂️ Project Structure
 
-```
-hellobooks/
-├── knowledge_base/               # Accounting documents (Markdown)
+```text
+HelloBooks-AI/
+│
+├── knowledge_base/
 │   ├── bookkeeping.md
 │   ├── invoices.md
-│   ├── profit_and_loss.md
 │   ├── balance_sheet.md
 │   ├── cash_flow.md
-│   ├── accounts_payable_receivable.md
 │   ├── taxation_gst.md
 │   └── financial_ratios.md
 │
 ├── src/
-│   ├── rag.py                    # Core RAG engine
-│   └── app.py                    # FastAPI web application
+│   ├── rag.py
+│   └── app.py
 │
 ├── templates/
-│   └── index.html                # Web UI
+│   └── index.html
+│
+├── Screenshots/
 │
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
 ├── .env.example
-├── .gitignore
-└── README.md
+├── README.md
+└── .gitignore
 ```
 
 ---
 
-## ✅ Prerequisites
+# 🚀 Features
 
-| Tool | Notes |
-|------|-------|
-| Python 3.11+ | Or use Docker |
-| Groq API Key | Free at [console.groq.com](https://console.groq.com) |
-| Docker (optional) | For containerized deployment |
-
----
-
-## 🚀 Quick Start
-
-### Step 1 — Clone the repository
-```bash
-git clone https://github.com/YASH-02042002/HelloBook-AI.git
-cd HelloBook-AI
-```
-
-### Step 2 — Create virtual environment
-```bash
-python -m venv venv
-
-# Windows
-venv\Scripts\activate
-
-# Mac/Linux
-source venv/bin/activate
-```
-
-### Step 3 — Install dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### Step 4 — Setup environment variables
-```bash
-copy .env.example .env
-notepad .env
-```
-Add your Groq API key:
-```
-GROQ_API_KEY=gsk_your-key-here
-```
-
-### Step 5 — Build vector index
-```bash
-python src/rag.py --build
-```
-
-### Step 6 — Start the server
-```bash
-python src/app.py
-```
-
-### Step 7 — Open in browser
-```
-http://localhost:8000
-```
+- AI-powered bookkeeping assistant
+- Retrieval-Augmented Generation (RAG)
+- Semantic document search
+- FastAPI backend
+- FAISS vector database
+- Sentence Transformer embeddings
+- Groq LLaMA integration
+- Source-aware responses
+- Docker support
+- Lightweight local deployment
 
 ---
 
-## 🐳 Docker Deployment
-
-```bash
-# Build and run
-docker compose up --build
-
-# Open browser
-http://localhost:8000
-```
-
----
-
-## 🌐 API Reference
-
-### `GET /`
-Web UI
-
-### `GET /health`
-```json
-{ "status": "ok", "index_loaded": true, "vectors": 36 }
-```
-
-### `POST /ask`
-**Request:**
-```json
-{ "question": "What is the difference between cash flow and profit?" }
-```
-**Response:**
-```json
-{
-  "question": "What is the difference between cash flow and profit?",
-  "answer": "Cash flow tracks actual money moving in and out...",
-  "sources": ["Cash Flow", "Profit And Loss"],
-  "chunks": [{ "source": "Cash Flow", "text": "...", "score": 0.87 }]
-}
-```
-
-### `POST /rebuild-index`
-Rebuilds the FAISS index from the knowledge base.
-
----
-
-## 📚 Knowledge Base Topics
-
-| File | Topics |
-|------|--------|
-| `bookkeeping.md` | Double-entry system, journals, ledgers |
-| `invoices.md` | Invoice types, payment terms, GST |
-| `profit_and_loss.md` | Revenue, COGS, gross/net profit, EBITDA |
-| `balance_sheet.md` | Assets, liabilities, equity |
-| `cash_flow.md` | Operating/investing/financing activities, FCF |
-| `accounts_payable_receivable.md` | AR/AP processes, aging reports, DSO |
-| `taxation_gst.md` | Income tax, GST, deductions, depreciation |
-| `financial_ratios.md` | Liquidity, profitability, solvency ratios |
-
----
-
-## 🛠️ Tech Stack
+# 🛠️ Tech Stack
 
 | Layer | Technology |
-|-------|-----------|
-| Backend | FastAPI (Python) |
-| Embeddings | HuggingFace `all-MiniLM-L6-v2` (Local, FREE) |
+|-------|------------|
+| Backend | FastAPI |
+| Language | Python |
+| Embeddings | Sentence Transformers |
 | Vector Store | FAISS |
-| LLM | Groq LLaMA 3.3 70B (Free tier) |
+| LLM | Groq LLaMA 3.3 70B |
 | Frontend | HTML, CSS, JavaScript |
 | Deployment | Docker + Docker Compose |
 
 ---
 
-## 🛠️ Troubleshooting
+# ✅ Prerequisites
 
-| Problem | Solution |
-|---------|----------|
-| `GROQ_API_KEY not set` | Add key in `.env` file |
-| `Index not found` | Run `python src/rag.py --build` |
-| Model decommissioned error | Update model name in `rag.py` |
-| Port already in use | Change port in `app.py` |
+| Tool | Notes |
+|------|------|
+| Python 3.11+ | Recommended |
+| Groq API Key | Free from console.groq.com |
+| Docker (Optional) | For container deployment |
 
 ---
 
-## 📄 License
+# 🚀 Installation
+
+## Step 1 — Clone Repository
+
+```bash
+git clone https://github.com/YASH-02042002/HelloBook-AI.git
+cd HelloBook-AI
+```
+
+---
+
+## Step 2 — Create Virtual Environment
+
+### Windows
+
+```bash
+py -3.11 -m venv venv
+venv\Scripts\activate
+```
+
+### Mac/Linux
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+---
+
+## Step 3 — Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Step 4 — Setup Environment Variables
+
+Create `.env` file:
+
+```env
+GROQ_API_KEY=gsk_your_api_key_here
+```
+
+---
+
+## Step 5 — Build Vector Index
+
+```bash
+python src/rag.py --build
+```
+
+---
+
+## Step 6 — Start Application
+
+```bash
+python src/app.py
+```
+
+---
+
+## Step 7 — Open in Browser
+
+```text
+http://localhost:8000
+```
+
+---
+
+# 🐳 Docker Deployment
+
+## Build Docker Image
+
+```bash
+docker build -t hellobooks-ai .
+```
+
+---
+
+## Run Docker Container
+
+```bash
+docker run -p 8000:8000 --env-file .env hellobooks-ai
+```
+
+---
+
+## Run with Docker Compose
+
+```bash
+docker-compose up --build
+```
+
+---
+
+## Stop Docker Containers
+
+```bash
+docker-compose down
+```
+
+---
+
+# 🌐 API Endpoints
+
+## GET /
+
+Returns the web interface.
+
+---
+
+## GET /health
+
+```json
+{
+  "status": "ok",
+  "index_loaded": true,
+  "vectors": 36
+}
+```
+
+---
+
+## POST /ask
+
+### Request
+
+```json
+{
+  "question": "What is bookkeeping?"
+}
+```
+
+### Response
+
+```json
+{
+  "question": "What is bookkeeping?",
+  "answer": "Bookkeeping is the process of recording financial transactions...",
+  "sources": ["Bookkeeping"],
+  "chunks": []
+}
+```
+
+---
+
+## POST /rebuild-index
+
+Rebuilds FAISS vector index from the knowledge base.
+
+---
+
+# 💡 Example Questions
+
+```text
+What is bookkeeping?
+```
+
+```text
+Explain double-entry bookkeeping with an example.
+```
+
+```text
+What are common bookkeeping mistakes businesses should avoid?
+```
+
+```text
+What is the role of bookkeeping in tax preparation?
+```
+
+---
+
+# 📚 Knowledge Base Topics
+
+| File | Topics |
+|------|--------|
+| bookkeeping.md | Journals, ledgers, double-entry |
+| invoices.md | Invoice management |
+| balance_sheet.md | Assets, liabilities, equity |
+| cash_flow.md | Cash flow analysis |
+| taxation_gst.md | GST and taxation |
+| financial_ratios.md | Financial performance ratios |
+
+---
+
+# ⚠️ Challenges Faced
+
+One major challenge was improving semantic retrieval quality.
+
+Initially, keyword-based retrieval produced inaccurate results.  
+To solve this issue, semantic embeddings using Sentence Transformers and FAISS similarity search were implemented.
+
+Another challenge involved handling compatibility issues between Python versions and AI libraries such as FAISS and Sentence Transformers.
+
+---
+
+# 🔮 Future Improvements
+
+- PDF and DOCX ingestion
+- Multi-user authentication
+- Chat history memory
+- Cloud deployment
+- Advanced reranking
+- Citation highlighting
+- Voice-based interaction
+
+---
+
+# 🎥 Demo Video
+
+[Watch Demo Video](YOUR_VIDEO_LINK)
+
+---
+
+# 📄 License
 
 MIT License — free to use and modify.
+
+---
+
+# 👨‍💻 Author
+
+Yash Paliwal
+
+GitHub:
+https://github.com/YASH-02042002
